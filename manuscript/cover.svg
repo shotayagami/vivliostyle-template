@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1480 2100" width="1480" height="2100">
+  <rect width="1480" height="2100" fill="#1f3a5f"/>
+  <rect x="90" y="90" width="1300" height="1920" fill="none" stroke="#7fa8d4" stroke-width="4"/>
+  <g fill="#ffffff" font-family="YuGothic, 'Yu Gothic', 'Hiragino Sans', 'Noto Sans JP', sans-serif" text-anchor="middle">
+    <text x="740" y="980" font-size="120" font-weight="bold">本のタイトル</text>
+    <text x="740" y="1780" font-size="56" fill="#c8dcf0" letter-spacing="6">あなたの名前</text>
+  </g>
+</svg>

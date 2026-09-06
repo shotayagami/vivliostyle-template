@@ -1,0 +1,18 @@
+/* 表紙ページ専用スタイル（画像を紙面いっぱいに配置する） */
+
+@page {
+  margin: 0;
+  @top-outer { content: none; }
+  @bottom-center { content: none; }
+}
+
+body {
+  margin: 0;
+}
+
+[role='doc-cover'] {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+}

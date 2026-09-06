@@ -1,0 +1,23 @@
+{
+  "name": "vivliostyle-workspace",
+  "version": "0.0.0",
+  "description": "Vivliostyle book workspace",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "preview": "vivliostyle preview",
+    "build": "vivliostyle build",
+    "build:epub": "vivliostyle build -o output/book.epub",
+    "build:webpub": "vivliostyle build -o output/webpub -f webpub",
+    "build:press": "vivliostyle build -o output/book-press.pdf --preflight press-ready",
+    "clean": "node -e \"require('fs').rmSync('output',{recursive:true,force:true})\"",
+    "clean:all": "node -e \"for(const p of ['output','.vivliostyle'])require('fs').rmSync(p,{recursive:true,force:true})\""
+  },
+  "devDependencies": {
+    "@vivliostyle/cli": "^11.2.0",
+    "@vivliostyle/theme-techbook": "^2.0.2"
+  }
+}

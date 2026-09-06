@@ -1,0 +1,12 @@
+# 依存パッケージ
+node_modules/
+
+# Vivliostyle CLI の作業ディレクトリ（中間 HTML・テーマの実体）
+.vivliostyle/
+
+# ビルド生成物
+output/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,106 @@
+/**
+ * プロジェクト固有のスタイル調整。
+ * @vivliostyle/theme-techbook のあとに読み込まれ、変数を上書きする。
+ *
+ * 変数の一覧:
+ *   theme-base   https://github.com/vivliostyle/themes/tree/main/packages/%40vivliostyle/theme-base
+ *   theme-techbook  node_modules/@vivliostyle/theme-techbook/theme.css
+ *
+ * 注意: 柱（ヘッダー）とノンブル（ページ番号）は theme-techbook が
+ * @page :left / :right で設定済み。--vs-page--mbox-content-* を直接いじると
+ * 二重に出るので、下の --vs-theme--page-* を使うこと。
+ */
+
+:root {
+  /* ------------------------------------------------------------------
+   * 本文
+   * ------------------------------------------------------------------ */
+  --vs-font-family: '游明朝', 'YuMincho', 'Hiragino Mincho ProN', serif;
+  --vs-line-height: 1.75;
+  /* --vs-font-size: 9pt; */
+
+  /* ------------------------------------------------------------------
+   * 見出し
+   * ------------------------------------------------------------------ */
+  --vs--heading-font-family: '游ゴシック', 'YuGothic', 'Hiragino Sans', sans-serif;
+
+  /* ------------------------------------------------------------------
+   * ページ余白（A5 向けに theme-techbook の 25mm/22mm から少し詰める）
+   * 注意: margin-bottom を詰めすぎると、ページ下部に出た脚注が
+   * 収まりきらず次ページに送られ、ノンブルと重なることがある。
+   * ------------------------------------------------------------------ */
+  --vs-page--margin-top: 20mm;
+  --vs-page--margin-bottom: 25mm;
+  --vs-page--margin-inner: 20mm;
+  --vs-page--margin-outer: 18mm;
+
+  /* ------------------------------------------------------------------
+   * 柱とノンブル（theme-techbook の拡張ポイント）
+   *   :left  ページ … 上外側 = top-left-content   下外側 = bottom-content
+   *   :right ページ … 上外側 = top-right-content  下外側 = bottom-content
+   * ------------------------------------------------------------------ */
+  /* --vs-theme--page-top-left-content: env(pub-title); */   /* 書名 */
+  /* --vs-theme--page-top-right-content: env(doc-title); */  /* 章名 */
+  /* --vs-theme--page-bottom-content: counter(page); */      /* ページ番号 */
+
+  /* 柱を消したい場合は none を指定する */
+  /* --vs-theme--page-top-left-content: none; */
+  /* --vs-theme--page-top-right-content: none; */
+}
+
+/* ------------------------------------------------------------------
+ * 目次ページ
+ * 自動生成される index.html は <body><h1>書名</h1><nav id="toc">…
+ * という構造。theme-techbook が nav に break-before: page を掛けるため、
+ * 何もしないと書名だけの空ページができてしまう。
+ * 書名は表紙に出ているので隠し、目次をそのページから始める。
+ * （章の h1 は <section> に包まれるので、この指定の影響を受けない）
+ * ------------------------------------------------------------------ */
+body > h1 {
+  display: none;
+}
+
+#toc {
+  break-before: auto;
+}
+
+/* ------------------------------------------------------------------
+ * 外部リンクの URL 脚注
+ *
+ * theme-base は既定で、PDF 出力時に外部リンク（href="http…"）の URL を
+ * 自動的に脚注として刷り込む。紙で読むときは親切だが、リンクを多用すると
+ * 脚注だらけになり、ページ末尾のリンクは脚注が次ページに送られて
+ * ほぼ空のページを作ってしまう。ここでは既定でオフにしている。
+ *
+ * 有効に戻したい場合は、以下のブロックを丸ごと削除する。
+ * ------------------------------------------------------------------ */
+@media print {
+  :not(.footnote) > a[href^='http'] {
+    counter-increment: none;
+  }
+
+  :not(.footnote) > a[href^='http']::before,
+  :not(.footnote) > a[href^='http']::after {
+    content: none;
+  }
+
+  /* URL を刷らない代わりに、リンクであることは下線で示す。
+     （theme-base は URL 脚注を出す前提で色と下線を消しているため） */
+  :not(.footnote) > a[href^='http'] {
+    text-decoration: underline;
+  }
+}
+
+/* ------------------------------------------------------------------
+ * 脚注
+ * 本文より少し小さく組み、脚注エリアの上余白を詰める。
+ *
+ * なお Vivliostyle は、脚注の呼び出しがページの最終行に来て脚注を組む
+ * 余白が残っていない場合、呼び出しはそのページに残したまま脚注本文だけを
+ * 次ページへ送る。エリアを詰めても完全には避けられないので、
+ * 気になる箇所は本文の長さで調整すること。
+ * ------------------------------------------------------------------ */
+:root {
+  --vs-footnote--font-size: 0.85em;
+  --vs-footnote--area-margin-block: calc(var(--vs-spacing-rlh) * 0.5) 0;
+}
