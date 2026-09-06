@@ -1,5 +1,6 @@
 ---
 title: はじめに
+class: chapter
 ---
 
 # はじめに

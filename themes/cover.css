@@ -1,18 +1,55 @@
-/* 表紙ページ専用スタイル（画像を紙面いっぱいに配置する） */
+/**
+ * 表紙・裏表紙 — 任意の画像を紙面いっぱいに敷く。
+ *
+ * 使い方: vivliostyle.config.js の rel:'cover' エントリに
+ *   theme: './themes/cover.css'
+ * を指定する。画像は manuscript/images/ に置いて、
+ * 表紙は cover.src、裏表紙はエントリの imageSrc で差し替える。
+ * JPG / PNG / WebP / SVG のいずれでも、縦横比が用紙と違っても構わない。
+ */
 
+/* Vivliostyle では 100vw / 100vh は「版面（マージンの内側）」を指す。
+   theme-techbook は @page :left / :right にマージンを設定しており、
+   素の @page より詳細度が高い。全部 0 にしないと画像の周りに白が残る。 */
 @page {
   margin: 0;
-  @top-outer { content: none; }
-  @bottom-center { content: none; }
 }
-
-body {
+@page :left {
+  margin: 0;
+}
+@page :right {
+  margin: 0;
+}
+@page :first {
   margin: 0;
 }
 
+/* 表紙に柱・ノンブルは出さない */
+@page {
+  @top-left-corner { content: none; }
+  @top-left { content: none; }
+  @top-center { content: none; }
+  @top-right { content: none; }
+  @top-right-corner { content: none; }
+  @bottom-left-corner { content: none; }
+  @bottom-left { content: none; }
+  @bottom-center { content: none; }
+  @bottom-right { content: none; }
+  @bottom-right-corner { content: none; }
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* CLI が生成する表紙 HTML は object-fit: contain を内蔵スタイルで持つ。
+   このファイルは <link> として後から読まれるので、同じ詳細度なら後勝ちで
+   cover が効く。contain だと余白が出るので必ず cover にすること。 */
 [role='doc-cover'] {
   display: block;
-  width: 100vw;
-  height: 100vh;
+  inline-size: 100vw;
+  block-size: 100vh;
   object-fit: cover;
 }

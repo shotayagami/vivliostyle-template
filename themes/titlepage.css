@@ -1,0 +1,55 @@
+/**
+ * 扉（タイトルページ）
+ *
+ * theme-base には colophon や appendix などの名前付きページが用意されているが、
+ * 扉に相当するものは無いので自分で定義する。
+ * 使い方: 原稿のフロントマターに class: titlepage を書き、
+ * エントリの theme に本文テーマと一緒に並べる。
+ */
+
+html.titlepage,
+body.titlepage {
+  page: titlepage;
+}
+
+/* 柱もノンブルも出さない */
+@page titlepage {
+  --vs-page--mbox-visibility: hidden;
+}
+
+.titlepage-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* Vivliostyle では 100vh が版面（マージンの内側）の高さになる。
+     100% だと中身の高さにしかならず、天地中央にならない。 */
+  min-block-size: 100vh;
+  text-align: center;
+}
+
+.titlepage-body h1 {
+  --vs--h1-font-size: 2.1em;
+  margin-block: 0 1.2rem;
+  border: none;
+  break-before: auto;
+  line-height: 1.4;
+}
+
+/* 扉の見出しには章番号を振らない */
+.titlepage-body h1::before {
+  content: none;
+}
+
+.titlepage-body .subtitle {
+  font-size: 1.1em;
+  margin-block: 0 6rem;
+  color: var(--vs-color-body);
+}
+
+.titlepage-body .byline {
+  font-size: 1em;
+  letter-spacing: 0.2em;
+  text-indent: 0.2em;
+  margin-block: 0;
+}

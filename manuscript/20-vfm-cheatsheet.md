@@ -1,5 +1,6 @@
 ---
 title: VFM 記法チートシート
+class: chapter
 ---
 
 # VFM 記法チートシート

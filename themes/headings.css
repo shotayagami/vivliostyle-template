@@ -1,0 +1,161 @@
+/**
+ * 見出しのデザインと採番（LaTeX の titlesec / \titleformat 相当）
+ * =========================================================================
+ *
+ * 【採番の仕組み】
+ * theme-base が章カウンタを面倒みてくれる。CSS 側で counter-reset や
+ * counter-increment を書く必要はない。
+ *
+ *   html.chapter, body.chapter          { page: chapter-document; }
+ *   @page :nth(1)                       { counter-increment: …doc-counter-increment… }
+ *   @page chapter-document              { --vs-page--doc-counter-increment:
+ *                                           vs-counter-doc vs-counter-chapter; }
+ *
+ * @page :nth(1) は「各文書の 1 ページ目」で発火する。VFM は章ごとに別 HTML を
+ * 出力するので、章の原稿のフロントマターに
+ *
+ *   ---
+ *   title: 章のタイトル
+ *   class: chapter
+ *   ---
+ *
+ * と書くだけで vs-counter-chapter が 1, 2, 3 … と通る。
+ * class: chapter を書き忘れた原稿は採番対象から外れる（前書きや付録に便利）。
+ *
+ * 【使い分け】
+ * 下の「デザイン A」が既定で有効。B と C はコメントアウトしてあるので、
+ * A のブロックをコメントアウトして好きなものを有効にすれば入れ替わる。
+ * ========================================================================= */
+
+:root {
+  /* 見出しのアクセント色。3 つのデザインで共通に使う。 */
+  --heading-accent: #1f3a5f;
+}
+
+/* -------------------------------------------------------------------------
+ * 節（h2）と項（h3）の採番: 1.1 / 1.1.1
+ * 章番号は theme-base、節・項の番号は theme-base の vs-counter-sec-h2 /
+ * vs-counter-sec-h3 を使う。h3 は節ごとに振り直す必要がある。
+ * ------------------------------------------------------------------------- */
+section.level2 {
+  counter-reset: vs-counter-sec-h3;
+}
+
+body.chapter section.level2 > h2::before {
+  content: counter(vs-counter-chapter) '.' counter(vs-counter-sec-h2);
+  display: inline-block;
+  margin-inline-end: 0.75em;
+  color: var(--heading-accent);
+}
+
+body.chapter section.level3 > h3::before {
+  content: counter(vs-counter-chapter) '.' counter(vs-counter-sec-h2) '.'
+    counter(vs-counter-sec-h3);
+  display: inline-block;
+  margin-inline-end: 0.6em;
+  color: var(--heading-accent);
+}
+
+/* -------------------------------------------------------------------------
+ * デザイン A（既定）: 大きな章番号 + 下罫線
+ * ------------------------------------------------------------------------- */
+body.chapter section.level1 > h1 {
+  --vs--h1-font-size: 1.7em;
+  margin-block: 0 2.6rem;
+  padding-block-end: 0.55em;
+  border-block-end: 1px solid currentColor;
+  text-align: start;
+}
+
+body.chapter section.level1 > h1::before {
+  content: '第' counter(vs-counter-chapter) '章';
+  display: block;
+  font-size: 2.1em;
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+  color: var(--heading-accent);
+  margin-block-end: 0.18em;
+}
+
+/* -------------------------------------------------------------------------
+ * デザイン B: 塗りブロックのタグを見出しの脇に置く
+ * 使うときは A のブロックをコメントアウトし、ここのコメントを外す。
+ * ------------------------------------------------------------------------- */
+/*
+body.chapter section.level1 > h1 {
+  --vs--h1-font-size: 1.5em;
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  margin-block: 0 2.8rem;
+  border: none;
+  padding: 0;
+}
+
+body.chapter section.level1 > h1::before {
+  content: '第\A' counter(vs-counter-chapter) '\A章';
+  white-space: pre;
+  flex: none;
+  display: block;
+  background-color: var(--heading-accent);
+  color: #fff;
+  font-size: 0.72em;
+  line-height: 1.35;
+  text-align: center;
+  inline-size: 2.4em;
+  padding-block: 0.55em;
+}
+*/
+
+/* -------------------------------------------------------------------------
+ * デザイン C: 中央寄せ + 字間を開ける + ヘアライン
+ * ------------------------------------------------------------------------- */
+/*
+body.chapter section.level1 > h1 {
+  --vs--h1-font-size: 1.45em;
+  text-align: center;
+  font-weight: 400;
+  letter-spacing: 0.32em;
+  text-indent: 0.32em;
+  margin-block: 5.5rem 3.4rem;
+  border: none;
+  padding: 0;
+}
+
+body.chapter section.level1 > h1::before {
+  content: '第 ' counter(vs-counter-chapter) ' 章';
+  display: block;
+  font-size: 0.52em;
+  letter-spacing: 0.5em;
+  text-indent: 0.5em;
+  color: var(--heading-accent);
+  margin-block: 0 1.9em;
+}
+
+body.chapter section.level1 > h1::after {
+  content: '';
+  display: block;
+  inline-size: 3.2em;
+  block-size: 0;
+  border-block-start: 1px solid currentColor;
+  margin: 1.4em auto 0;
+}
+*/
+
+/* -------------------------------------------------------------------------
+ * 章の開始ページの調整
+ * ------------------------------------------------------------------------- */
+
+/* 章の扉には柱を出さない（ノンブルは残す） */
+@page chapter-document:nth(1) {
+  --vs-page--mbox-content-top-left: none;
+  --vs-page--mbox-content-top-right: none;
+}
+
+/* 章を必ず右起こし（奇数ページ始まり）にしたい場合はコメントを外す。
+   前の章が奇数ページで終わると白ページが 1 枚入る。 */
+/*
+:root {
+  --vs-section--h1-break-before: recto;
+}
+*/
